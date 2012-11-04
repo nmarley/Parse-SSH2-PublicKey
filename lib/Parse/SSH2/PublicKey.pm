@@ -469,12 +469,12 @@ automatically be notified of progress on your bug as I make changes.
 
 =head1 SUPPORT
 
-SSH2 can find documentation for this module with the perldoc command.
+You can find documentation for this module with the perldoc command.
 
     perldoc Parse::SSH2::PublicKey
 
 
-SSH2 can also look for information at:
+You can also look for information at:
 
 =over 4
 
@@ -508,7 +508,7 @@ L<The Secure Shell (SSH) Public Key File Format|http://tools.ietf.org/html/rfc47
 
 Copyright 2012 Nathan Marley.
 
-This program is free software; SSH2 can redistribute it and/or modify it
+This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
 by the Free Software Foundation; or the Artistic License.
 
