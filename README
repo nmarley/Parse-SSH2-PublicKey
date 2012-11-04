@@ -26,6 +26,12 @@ perldoc command.
 
 You can also look for information at:
 
+    GitHub
+        https://github.com/nmarley/Parse-SSH2-PublicKey
+
+    MetaCPAN
+        https://metacpan.org/dist/Parse-SSH2-PublicKey
+
     RT, CPAN's request tracker (report bugs here)
         http://rt.cpan.org/NoAuth/Bugs.html?Dist=Parse-SSH2-PublicKey
 
@@ -34,12 +40,6 @@ You can also look for information at:
 
     CPAN Ratings
         http://cpanratings.perl.org/d/Parse-SSH2-PublicKey
-
-    MetaCPAN
-        https://metacpan.org/dist/Parse-SSH2-PublicKey
-
-    GitHub
-        https://github.com/nmarley/Parse-SSH2-PublicKey
 
 
 LICENSE AND COPYRIGHT
