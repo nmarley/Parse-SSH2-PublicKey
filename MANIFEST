@@ -18,4 +18,3 @@ t/parse-file.t
 t/parse.t
 t/secsh-pubkey.t
 ignore.txt
-test.pl
