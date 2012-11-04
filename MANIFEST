@@ -8,3 +8,13 @@ t/00-load.t
 t/manifest.t
 t/pod-coverage.t
 t/pod.t
+t/boilerplate.t
+t/convert.t
+t/invalid-filedata.t
+t/invalid-obj.t
+t/openssh-pubkey.t
+t/parse-file.t
+t/parse.t
+t/secsh-pubkey.t
+ignore.txt
+test.pl
