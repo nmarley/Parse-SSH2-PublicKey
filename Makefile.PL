@@ -12,11 +12,13 @@ WriteMakefile(
       ? ('LICENSE'=> 'perl')
       : ()),
     PL_FILES            => {},
+    BUILD_REQUIRES => {
+        'File::Temp' => 0,
+        'File::Slurp' => 0,
+    },
     PREREQ_PM => {
         'autodie' => 0,
         'Carp' => 0,
-        'File::Temp' => 0,
-        'File::Slurp' => 0,
         'MIME::Base64' => 0,
         'Moo' => 0,
         'Test::More' => 0,
