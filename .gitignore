@@ -8,3 +8,5 @@ Build
 *.bak
 _build
 MYMETA.yml
+MYMETA.json
+Parse-SSH2-PublicKey-*
