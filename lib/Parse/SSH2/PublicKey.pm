@@ -303,7 +303,6 @@ sub openssh {
     return $str;
 }
 
-
 =head2 comment()
 
 Convenience method for $k->headers->{Comment}. Returns the Comment header value or the empty string.
@@ -326,6 +325,32 @@ sub subject {
     return $self->headers->{Subject} || '';
 }
 
+=head1 ATTRIBUTES
+
+=head2 encryption
+
+Either 'ssh-rsa' or 'ssh-dss', for RSA and DSA keys, respectively.
+
+=head2 header_order
+
+Order of headers parsed from SECSH-format keys. See also
+L<http://tools.ietf.org/html/rfc4716>.
+
+=head2 headers
+
+Hashref containing headers parsed from SECSH-format keys.
+See also L<http://tools.ietf.org/html/rfc4716>.
+
+=head2 key
+
+The actual base64-encoded key data.
+
+=head2 type
+
+Either 'public' or 'private', but private keys aren't currently
+supported. Obsolete. (Or perhaps ahead of it's time.)
+
+=cut
 
 # internal method, not intended for use outside this module
 # Breaks long string into chunks of MAXLEN length,
@@ -438,9 +463,9 @@ Nathan Marley, C<< <nathan.marley at gmail.com> >>
 
 =head1 BUGS
 
-Please report any bugs or feature requests to C<bug-Parse-SSH2-publickey at rt.cpan.org>, or through
-the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Parse-SSH2-PublicKey>.  I will be notified, and then SSH2'll
-automatically be notified of progress on SSH2r bug as I make changes.
+Please report any bugs or feature requests to C<bug-parse-ssh2-publickey at rt.cpan.org>, or through
+the web interface at L<http://rt.cpan.org/NoAuth/ReportBug.html?Queue=Parse-SSH2-PublicKey>.  I will be notified, and then you'll
+automatically be notified of progress on your bug as I make changes.
 
 =head1 SUPPORT
 
