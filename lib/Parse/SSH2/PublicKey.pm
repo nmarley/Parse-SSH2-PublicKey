@@ -70,8 +70,8 @@ has encryption => (
     is  => 'ro',
     isa => sub {
         my $enc = shift;
-        confess "must be 'ssh-rsa' or 'ssh-dss'"
-            unless grep { $enc eq $_ } qw/ssh-rsa ssh-dss/;
+        confess "must be 'ssh-rsa', 'ssh-dss', 'ecdsa-sha2-nistp256' or 'ssh-ed25519'"
+            unless grep { $enc eq $_ } qw/ssh-rsa ssh-dss  ecdsa-sha2-nistp256 ssh-ed25519/;
     },
     default => sub { '' },
 );
@@ -114,7 +114,7 @@ sub parse {
         my $entire_key;
 
         # OpenSSH format -- all on one line.
-        if ( $data =~ m%((ssh-rsa|ssh-dss)\ ([A-Z0-9a-z/+=]+)\s*([^\n]*))%gsmx ) {
+        if ( $data =~ m%((ssh-rsa|ssh-dss|ecdsa-sha2-nistp256|ssh-ed25519)\ ([A-Z0-9a-z/+=]+)\s*([^\n]*))%gsmx ) {
             $entire_key = $1;
 
             # TODO: pull encryption from base64 key data, not here... just to be safe.

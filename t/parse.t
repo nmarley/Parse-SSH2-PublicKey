@@ -22,6 +22,10 @@ Qf2rGA0G/rKNx5r1X7tw2bIfKymVDUV/maTwPwXrQrJ/JHQjONREqmNJpq+EkugqR46Kbr
 3NVMGXvl8g63t1IKXNcPAZ
 ---- END SSH2 PUBLIC KEY ----
 };
+my $openssh_ecdsa_pub = q{ecdsa-sha2-nistp256 AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMK1IxOZEKvh96sRuyuK9/Cf3iRLTQeXBx6JcURpoZOeFjgHQwNXccxWAwzheIEpqSAEYKTYs2BW0M/Kc1FC7ps= My ECDSA key
+};
+my $openssh_ed25519_pub = q{ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIEg0qEPVdgsctK3bY+xnIMUYqlGvA8mgKulekNlxG/jB My Ed25519 key
+};
 
 # parse secsh
 @keys = Parse::SSH2::PublicKey->parse( $secsh_pub );
@@ -55,8 +59,8 @@ is ( $k->type, 'public', 'Public key' );
 undef $k; undef @keys;
 
 # parse different pubkey formats in the SAME FILE!!
-my $data = $openssh_rsa_pub . $openssh_dsa_pub .  $secsh_pub;
+my $data = $openssh_rsa_pub . $openssh_dsa_pub .  $secsh_pub . $openssh_ecdsa_pub . $openssh_ed25519_pub;
 @keys = Parse::SSH2::PublicKey->parse($data);
-is( @keys, 3, "Correct number of keys parsed from input" );
+is( @keys, 5, "Correct number of keys parsed from input" );
 
 

@@ -2,7 +2,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 21;
+use Test::More tests => 33;
 use Carp;
 
 use_ok('Parse::SSH2::PublicKey');
@@ -60,6 +60,17 @@ Qf2rGA0G/rKNx5r1X7tw2bIfKymVDUV/maTwPwXrQrJ/JHQjONREqmNJpq+EkugqR46Kbr
 ---- END SSH2 PUBLIC KEY ----
 };
 
+my $secsh_ecdsa_key = q{---- BEGIN SSH2 PUBLIC KEY ----
+AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMK1IxOZEKvh96sRuy
+uK9/Cf3iRLTQeXBx6JcURpoZOeFjgHQwNXccxWAwzheIEpqSAEYKTYs2BW0M/Kc1FC7ps=
+---- END SSH2 PUBLIC KEY ----
+};
+
+my $secsh_ed25519_key = q{---- BEGIN SSH2 PUBLIC KEY ----
+AAAAC3NzaC1lZDI1NTE5AAAAIEg0qEPVdgsctK3bY+xnIMUYqlGvA8mgKulekNlxG/jB
+---- END SSH2 PUBLIC KEY ----
+};
+
 @keys = Parse::SSH2::PublicKey->parse( $secsh_rsa_key );
 is( @keys, 1, 'Got 1 key' );
 
@@ -74,20 +85,36 @@ $k    = shift @keys;
 isa_ok( $k, 'Parse::SSH2::PublicKey', 'Got the right object' );
 is( $k->encryption, 'ssh-dss', 'DSA key' );
 
+@keys = Parse::SSH2::PublicKey->parse( $secsh_ecdsa_key );
+is( @keys, 1, 'Got 1 key' );
+
+$k    = shift @keys;
+isa_ok( $k, 'Parse::SSH2::PublicKey', 'Got the right object' );
+is( $k->encryption, 'ecdsa-sha2-nistp256', 'ECDSA key' );
+
+@keys = Parse::SSH2::PublicKey->parse( $secsh_ed25519_key );
+is( @keys, 1, 'Got 1 key' );
+
+$k    = shift @keys;
+isa_ok( $k, 'Parse::SSH2::PublicKey', 'Got the right object' );
+is( $k->encryption, 'ssh-ed25519', 'ED25519 key' );
+
 
 # two in one text block
-my $two_keys = $secsh_pub . $secsh_dsa_key;
-#say "two_keys = [$two_keys]";
+my $four_keys = $secsh_pub . $secsh_dsa_key . $secsh_ecdsa_key . $secsh_ed25519_key;
+#say "four_keys = [$four_keys]";
 
 # parse public keyS
-@keys = Parse::SSH2::PublicKey->parse( $two_keys );
-is( @keys, 2, "Correct number of keys parsed from input" );
+@keys = Parse::SSH2::PublicKey->parse( $four_keys );
+is( @keys, 4, "Correct number of keys parsed from input" );
 
 my $k1 = shift @keys;
 my $k2 = shift @keys;
+my $k3 = shift @keys;
+my $k4 = shift @keys;
 
 is( $k1->comment, '"2048-bit rsa, sshuser@host001, Wed Dec 09 2009 13:26:29 -0600"', 'Comment field from 1st key in text block' );
-is( $k1->subject, '"sshuser@host001"', 'Comment field from 1st key in text block' );
+is( $k1->subject, '"sshuser@host001"', 'Subject field from 1st key in text block' );
 is( $k1->key, 'AAAAB3NzaC1yc2EAAAADAQABAAABAQC6ogUplPsKJkz2FNiD4nQaPyTzMaXt8V75/hmy4dHNGWzmvMJTqJHPFM3BthQLZkjCem6Lk6rtj61CgqvWwo/yjRLuy7wFdOhwEs+ByT2BlVmvxhvTBwhL0gK2/AGSIiAUmuWguXZfNlqUN4bokr0caSv7JH8pwc+4OsUBfyGpMc8DO8SfNhyGvAiOZlUfcCJiikdEw+H9n+zq/r9vPlN6sQEO99akeGpIWkiVUfSjKrdgP6LdfeBltv1zQf2rGA0G/rKNx5r1X7tw2bIfKymVDUV/maTwPwXrQrJ/JHQjONREqmNJpq+EkugqR46Kbr3NVMGXvl8g63t1IKXNcPAZ', 'Base64 key data from 1st key in text block' );
 is( $k1->encryption, 'ssh-rsa', 'RSA key' );
 
@@ -95,8 +122,18 @@ is( $k2->comment, '', 'Comment field from 2nd key in text block' );
 is( $k2->key, 'AAAAB3NzaC1kc3MAAACBAN/AnuJA/hRijCxBsKnLyY3cgsGKhsxL9vdW2HFsMmXjnH7B4Xgf2FkBuOQVc0P0YYFlmAxtQcgXjLbnb0VWDNjBPlsmuJ7ZnqSRUxNFCFl9eCB/HdOHGwOaWP0Br8rM2CkwSiGCMNfQ+aRLZTzVL4x7t9oDylfGghZ3BzVn+xdDAAAAFQDt9JwiTmmUq+rfZM6sxOV0yHl2DwAAAIEAx6n1APY+v55I6qER2qQghZ4WSw+uoJ3FJRjmAhUzoSOSpt9lAxpFAm3UoRUCnjiVZqoDjXMwnKo9Z6bAkH49OTq419wG1TffumJVpsFNlEt0JocqFk6BNeZxHih4l1JVkip/raHGvHid3RNa14HTpSzx1ucWVzBape0bDwyapQcAAACATK039wcx+zI9fcIZH7wjrCTxwA927coKR/xMSGYX5oe+iCXhEVAS9UOLl/GdAYUHB/zKxhjmvWKxAOVRw21M2oDRRrdw7hJ3GFkd13sFllq1vTMZuqGjweKgPeRW9bIyifoVVyD5wWHVYB7C0NXgKAjicstdaA7Wkp1CoKUUGiQ=', 'Key data from 2nd key in text block' );
 is( $k2->encryption, 'ssh-dss', 'DSA key' );
 
+is( $k3->comment, '', 'Comment field from 3rd key in text block' );
+is( $k3->key, 'AAAAE2VjZHNhLXNoYTItbmlzdHAyNTYAAAAIbmlzdHAyNTYAAABBBMK1IxOZEKvh96sRuyuK9/Cf3iRLTQeXBx6JcURpoZOeFjgHQwNXccxWAwzheIEpqSAEYKTYs2BW0M/Kc1FC7ps=', 'Key data from 3rd key in text block' );
+is( $k3->encryption, 'ecdsa-sha2-nistp256', 'ECDSA key' );
+
+is( $k4->comment, '', 'Comment field from 4th key in text block' );
+is( $k4->key, 'AAAAC3NzaC1lZDI1NTE5AAAAIEg0qEPVdgsctK3bY+xnIMUYqlGvA8mgKulekNlxG/jB', 'Key data from 4th key in text block' );
+is( $k4->encryption, 'ssh-ed25519', 'ED25519 key' );
+
 undef @keys;
 undef $k1;
 undef $k2;
+undef $k3;
+undef $k4;
 
 
